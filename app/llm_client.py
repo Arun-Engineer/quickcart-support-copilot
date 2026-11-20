@@ -3,42 +3,65 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI, AuthenticationError, APIConnectionError
+from pydantic import ValidationError
+from app.models import SupportAnswer
 
 load_dotenv()
 
 MODEL = "gpt-4o-mini"
 
-# def ask_llm(question:str, temperature: float = 1) -> dict:
-#     api_key = os.getenv("OPENAI_API_key")
+SYSTEM_PROMPT = """You are a support assistant for QuickCart, a quick-commerce grocery app.
+You ONLY help with QuickCart Topics: orders, delivery, payments, refunds, and account issues.
+If the question is about anything else, politely say you can only help with QuickCart questions,
+set "confidence" to 1 and "needs_human to false.
+Reply ONLY with a JSON object with exactly these keys:
+- "answer": your reply to the customer, 2 sentences or less
+- "confidence": a number from 0 to 1, how sure you are that the answer is correct
+- "needs_human": true if a human agent should take over (angry customer, refund dispute, safety issue, or you are unsure), otherwise false
+"""
+
+
+# def ask_llm(question: str, temperature: float = 0) -> dict:
+
+#     api_key = os.getenv("OPENAI_API_KEY")
+
 #     if api_key is None:
 #         raise ValueError("OPENAI_API_KEY is missing. Check your .env file.")
 
-#     client = OpenAI(api_key= api_key)
+#     client = OpenAI(api_key = api_key)
 
-#     response = client.chat.completions.create(
-#         model = MODEL,
-#         messages = [
-#             {"role": "system", "content": "you are a support assistant for QUickCart, a quick-commerce grocery app. Answer in 2 sentences are less."},
-#             {"role": "user", "content": question},
-#         ],
-#         temperature = temperature
-#     )
+#     try:
+#         response = client.chat.completions.create(
+#             model = MODEL,
+#             messages = [
+#                 {"role": "system", "content": "Your a support assistant for QuickCart, a quick-commerce grocery app. Answer in 2 sentences or less."},
+#                 {"role": "user", "content": question},
+#             ],
+#             temperature = temperature,
+#         )
+
+#     except AuthenticationError:
+#         return {"answer": None, "tokens": 0, "error": "Invalid API Key"}
+#     except APIConnectionError:
+#         return {"answer": None, "tokens": 0, "error": "Could not reach OPENAI. Check Internet."}
 
 #     answer = response.choices[0].message.content
 #     tokens = response.usage.total_tokens
 
-#     result = {"answer": answer, "tokens": tokens}
+#     result = {"answer": answer, "tokens": tokens, "error": None}
 #     return result
 
 # if __name__ == "__main__":
 #     print(ask_llm("How long does delivery usually take?"))
 
-def ask_llm(question: str, temperature: float = 0) -> dict:
+def error_result(message: str) -> dict:
+    return {"answer": None, "confidence": 0, "needs_human": True, "tokens": 0, "error": message}
 
+def ask_llm(question: str, temperature: float = 0) -> dict:
     api_key = os.getenv("OPENAI_API_KEY")
 
     if api_key is None:
-        raise ValueError("OPENAI_API_KEY is missing. Check your .env file.")
+        raise ValueError("OPENAI_API_KEY is missing. Check your.env file.")
 
     client = OpenAI(api_key = api_key)
 
@@ -46,22 +69,41 @@ def ask_llm(question: str, temperature: float = 0) -> dict:
         response = client.chat.completions.create(
             model = MODEL,
             messages = [
-                {"role": "system", "content": "Your a support assistant for QuickCart, a quick-commerce grocery app. Answer in 2 sentences or less."},
+                {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": question},
             ],
             temperature = temperature,
+            response_format = {"type": "json_object"},
         )
 
     except AuthenticationError:
-        return {"answer": None, "tokens": 0, "error": "Invalid API Key"}
+        return error_result("Invalid API key")
     except APIConnectionError:
-        return {"answer": None, "tokens": 0, "error": "Could not reach OPENAI. Check Internet."}
+        return error_result("Could not reach OpenAI. Check internet.")
 
-    answer = response.choices[0].message.content
+    raw_text = response.choices[0].message.content
     tokens = response.usage.total_tokens
 
-    result = {"answer": answer, "tokens": tokens, "error": None}
+    try:
+        parsed = SupportAnswer.model_validate_json(raw_text)
+    except validationError:
+        result = error_result("LLM returned invalid JSON")
+        result["tokens"] = tokens
+        return result
+    
+    result = parsed.model_dump()
+    result["tokens"] = tokens
+    result["error"] = None
     return result
 
 if __name__ == "__main__":
-    print(ask_llm("How long does delivery usually take?"))
+    questions = [
+        "How long does delivery usuallay take?",
+        "My order was wrong and I want a refund NOW, this is the third time!.",
+        "What is the capital of France?.",
+    ]
+
+    for question in questions:
+        print("Q: ", question)
+        print(ask_llm(question))
+        print()

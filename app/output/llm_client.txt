@@ -1,0 +1,21 @@
+quickcart-support-copilot> python -m app.llm_client   
+Q:  How long does delivery usuallay take?
+{'answer': 'Delivery usually takes between 30 minutes to 1 hour, depending on your location and the time of day. You can track your order in the app for real-time updates.', 'confidence': 0.9, 'needs_human': False, 'tokens': 177, 'error': None}
+
+Q:  My order was wrong and I want a refund NOW, this is the third time!.
+{'answer': 'I apologize for the inconvenience with your order. Please allow me to escalate this issue to a human agent who can assist you with your refund request.', 'confidence': 0.9, 'needs_human': True, 'tokens': 179, 'error': None}
+
+Q:  What is the capital of France?.
+{'answer': 'The capital of France is Paris.', 'confidence': 1.0, 'needs_human': False, 'tokens': 145, 'error': None}
+
+(.venv) PS E:\Automation\quickcart-support-copilot> python -m app.llm_client
+Q:  How long does delivery usuallay take?
+{'answer': 'Delivery times can vary based on your location and the time of day, but typically, orders are delivered within 30 to 60 minutes. You can check the estimated delivery time in the app when placing your order.', 'confidence': 0.9, 'needs_human': False, 'tokens': 239, 'error': None}
+
+Q:  My order was wrong and I want a refund NOW, this is the third time!.
+{'answer': "I'm sorry to hear about the issues with your order. Please contact our customer support directly for assistance with your refund request.", 'confidence': 0.9, 'needs_human': True, 'tokens': 228, 'error': None}
+
+Q:  What is the capital of France?.
+{'answer': "I'm sorry, but I can only help with QuickCart questions.", 'confidence': 1.0, 'needs_human': False, 'tokens': 205, 'error': None}
+
+(.venv) PS E:\Automation\quickcart-support-copilot> 
