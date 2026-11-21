@@ -1,0 +1,17 @@
+quickcart-support-copilot> python -m pytest -v
+============================= test session starts ==============================
+platform win32 -- Python 3.14.0, pytest-9.2.0, pluggy-1.7.0 -- E:\Automation\dsa_interview_prep\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: E:\Automation\quickcart-support-copilot
+plugins: anyio-4.16.0, playwright-0.10.0
+collected 7 items                                                               
+
+tests/test_llm_client.py::test_valid_reply_returns_five_keys PASSED       [ 14%]
+tests/test_llm_client.py::test_broken_json_returns_safe_error PASSED      [ 28%]
+tests/test_llm_client.py::test_missing_key_returns_safe_error PASSED      [ 42%]
+tests/test_llm_client.py::test_success_and_error_have_same_keys PASSED    [ 57%]
+tests/test_models.py::test_valid_answer_is_accepted PASSED                [ 71%]
+tests/test_models.py::test_confidence_above_1_is_rejected PASSED          [ 85%]
+tests/test_models.py::test_missing_needs_human_is_rejected PASSED         [100%]
+
+============================== 7 passed in 1.30s ===============================

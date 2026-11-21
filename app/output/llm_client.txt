@@ -19,3 +19,16 @@ Q:  What is the capital of France?.
 {'answer': "I'm sorry, but I can only help with QuickCart questions.", 'confidence': 1.0, 'needs_human': False, 'tokens': 205, 'error': None}
 
 (.venv) PS E:\Automation\quickcart-support-copilot> 
+
+
+(.venv) PS E:\Automation\quickcart-support-copilot> python -m app.llm_client
+Q:  How long does delivery usuallay take?
+{'answer': 'Delivery times can vary based on your location and the time of day, but typically, orders are delivered within 30 to 60 minutes. You can check the estimated delivery time in the app when placing your order.', 'confidence': 0.9, 'needs_human': False, 'tokens': 239, 'error': None}
+
+Q:  My order was wrong and I want a refund NOW, this is the third time!.
+{'answer': 'I understand your frustration with the repeated issues. Please provide your order details so I can assist you with the refund process.', 'confidence': 0.9, 'needs_human': True, 'tokens': 228, 'error': None}
+
+Q:  What is the capital of France?.
+{'answer': "I'm sorry, but I can only help with QuickCart questions.", 'confidence': 1.0, 'needs_human': False, 'tokens': 205, 'error': None}
+
+(.venv) PS E:\Automation\quickcart-support-copilot> 

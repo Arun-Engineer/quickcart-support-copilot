@@ -20,39 +20,18 @@ Reply ONLY with a JSON object with exactly these keys:
 - "needs_human": true if a human agent should take over (angry customer, refund dispute, safety issue, or you are unsure), otherwise false
 """
 
-
-# def ask_llm(question: str, temperature: float = 0) -> dict:
-
-#     api_key = os.getenv("OPENAI_API_KEY")
-
-#     if api_key is None:
-#         raise ValueError("OPENAI_API_KEY is missing. Check your .env file.")
-
-#     client = OpenAI(api_key = api_key)
-
-#     try:
-#         response = client.chat.completions.create(
-#             model = MODEL,
-#             messages = [
-#                 {"role": "system", "content": "Your a support assistant for QuickCart, a quick-commerce grocery app. Answer in 2 sentences or less."},
-#                 {"role": "user", "content": question},
-#             ],
-#             temperature = temperature,
-#         )
-
-#     except AuthenticationError:
-#         return {"answer": None, "tokens": 0, "error": "Invalid API Key"}
-#     except APIConnectionError:
-#         return {"answer": None, "tokens": 0, "error": "Could not reach OPENAI. Check Internet."}
-
-#     answer = response.choices[0].message.content
-#     tokens = response.usage.total_tokens
-
-#     result = {"answer": answer, "tokens": tokens, "error": None}
-#     return result
-
-# if __name__ == "__main__":
-#     print(ask_llm("How long does delivery usually take?"))
+def parse_llm_reply(raw_text: str, tokens: int) -> dict:
+    try:
+        parsed = SupportAnswer.model_validate_json(raw_text)
+    except ValidationError:
+        result = error_result("LLM returned invalid JSON")
+        result["tokens"] = tokens
+        return result
+        
+    result = parsed.model_dump()
+    result["tokens"] = tokens
+    result["error"] = None
+    return result
 
 def error_result(message: str) -> dict:
     return {"answer": None, "confidence": 0, "needs_human": True, "tokens": 0, "error": message}
@@ -84,19 +63,12 @@ def ask_llm(question: str, temperature: float = 0) -> dict:
     raw_text = response.choices[0].message.content
     tokens = response.usage.total_tokens
 
-    try:
-        parsed = SupportAnswer.model_validate_json(raw_text)
-    except validationError:
-        result = error_result("LLM returned invalid JSON")
-        result["tokens"] = tokens
-        return result
+    return parse_llm_reply(raw_text, tokens)
+
     
-    result = parsed.model_dump()
-    result["tokens"] = tokens
-    result["error"] = None
-    return result
 
 if __name__ == "__main__":
+
     questions = [
         "How long does delivery usuallay take?",
         "My order was wrong and I want a refund NOW, this is the third time!.",
