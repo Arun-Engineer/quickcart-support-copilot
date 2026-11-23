@@ -30,10 +30,12 @@ Download
 
 
 Part b postman
+200
 {
     "status": "ok"
 }
 
+200
 {
     "answer": "You can track your order status in the QuickCart app under the 'Orders' section. If you need further assistance, please let me know!",
     "confidence": 0.9,
@@ -99,3 +101,5 @@ Part b postman
         }
     ]
 }
+
+503
