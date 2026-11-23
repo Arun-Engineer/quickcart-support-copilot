@@ -1,0 +1,101 @@
+{
+  "answer": "You can track your order status in the QuickCart app under the 'Orders' section. If you need further assistance, please let me know!",
+  "confidence": 0.9,
+  "needs_human": false,
+  "tokens": 221,
+  "error": null
+}
+
+
+Code	Details
+422	
+Error: Unprocessable Content
+
+Response body
+Download
+{
+  "detail": [
+    {
+      "type": "missing",
+      "loc": [
+        "body",
+        "question"
+      ],
+      "msg": "Field required",
+      "input": {}
+    }
+  ]
+}
+
+
+
+Part b postman
+{
+    "status": "ok"
+}
+
+{
+    "answer": "You can track your order status in the QuickCart app under the 'Orders' section. If you need further assistance, please let me know!",
+    "confidence": 0.9,
+    "needs_human": false,
+    "tokens": 221,
+    "error": null
+}
+
+422 - Unprocessable entity
+{
+    "detail": [
+        {
+            "type": "missing",
+            "loc": [
+                "body",
+                "question"
+            ],
+            "msg": "Field required",
+            "input": {}
+        }
+    ]
+}
+
+405 - Method Not Allowed
+{
+    "detail": "Method Not Allowed"
+}
+
+404 - not found
+{
+    "detail": "Not Found"
+}
+
+422 - Unprocessable entity
+{
+    "detail": [
+        {
+            "type": "string_type",
+            "loc": [
+                "body",
+                "question"
+            ],
+            "msg": "Input should be a valid string",
+            "input": 12345
+        }
+    ]
+}
+
+422 - Unprocessable
+{
+    "detail": [
+        {
+            "type": "string_too_short",
+            "loc": [
+                "body",
+                "question"
+            ],
+            "msg": "String should have at least 1 character",
+            "input": "",
+            "ctx": {
+                "min_length": 1
+            }
+        }
+    ]
+}
