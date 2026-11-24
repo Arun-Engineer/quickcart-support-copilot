@@ -21,11 +21,12 @@ tests/test_models.py::test_valid_answer_is_accepted PASSED                [ 86%]
 tests/test_models.py::test_confidence_above_1_is_rejected PASSED          [ 93%]
 tests/test_models.py::test_missing_needs_human_is_rejected PASSED         [100%]
 
-============================== 15 passed in 2.29s =====
-
-kcart-support-copilot\.venv\Scripts\python.exe
+============================== 15 passed in 2.29s ==============================
+(.venv) PS quickcart-support-copilot> python -m pytest tests/test_api.py::test_chat_valid_question_returns_200 -v
+============================= test session starts ==============================
+platform win32 -- Python 3.14.0, pytest-9.2.0, pluggy-1.7.0 -- quickcart-support-copilot\.venv\Scripts\python.exe
 cachedir: .pytest_cache
-rootdir: uickcart-support-copilot
+rootdir: quickcart-support-copilot
 plugins: anyio-4.16.0
 collected 1 item                                                                
 
