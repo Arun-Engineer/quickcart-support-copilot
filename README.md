@@ -1,3 +1,5 @@
+![Tests](https://github.com/Arun-Engineer/quickcart-support-copilot/actions/workflows/tests.yml/badge.svg)
+
 # QuickCart Support Copilot
 
 A FastAPI service that answers quick-commerce customer questions (orders, refunds, delivery, substitutions) using an LLM, and returns a structured JSON answer with a confidence score and a "needs human" flag for escalation.
