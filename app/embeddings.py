@@ -42,12 +42,11 @@ def cosine_similarity(a, b):
     length_a = vector_length(a)
     length_b = vector_length(b)
 
+    if length_a == 0 or length_b == 0:
+        return 0.0
+
     product_of_lengths = length_a * length_b
 
-    try:
-        cos_sim = dot_product(a, b) / product_of_lengths
-
-    except ZeroDivisionError as error:
-        return f"{error} <- Due to this error."
+    cos_sim = dot_product(a, b) / product_of_lengths
 
     return cos_sim
