@@ -52,4 +52,4 @@ def test_cosine_zero_vector():
 
     cosine = cosine_similarity(a,b)
 
-    assert cosine in (0.0, 'division by zero <- Due to this error.')
+    assert cosine == 0.0
